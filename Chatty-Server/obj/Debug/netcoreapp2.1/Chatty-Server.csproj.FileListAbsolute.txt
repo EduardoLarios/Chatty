@@ -1,10 +1,10 @@
-F:\Eduardo\Documents\Code\C#\Chatty\Chatty-Server\bin\Debug\netcoreapp2.1\Chatty-Server.deps.json
-F:\Eduardo\Documents\Code\C#\Chatty\Chatty-Server\bin\Debug\netcoreapp2.1\Chatty-Server.runtimeconfig.json
-F:\Eduardo\Documents\Code\C#\Chatty\Chatty-Server\bin\Debug\netcoreapp2.1\Chatty-Server.runtimeconfig.dev.json
-F:\Eduardo\Documents\Code\C#\Chatty\Chatty-Server\bin\Debug\netcoreapp2.1\Chatty-Server.dll
-F:\Eduardo\Documents\Code\C#\Chatty\Chatty-Server\bin\Debug\netcoreapp2.1\Chatty-Server.pdb
-F:\Eduardo\Documents\Code\C#\Chatty\Chatty-Server\obj\Debug\netcoreapp2.1\Chatty-Server.csproj.CoreCompileInputs.cache
-F:\Eduardo\Documents\Code\C#\Chatty\Chatty-Server\obj\Debug\netcoreapp2.1\Chatty-Server.AssemblyInfoInputs.cache
-F:\Eduardo\Documents\Code\C#\Chatty\Chatty-Server\obj\Debug\netcoreapp2.1\Chatty-Server.AssemblyInfo.cs
-F:\Eduardo\Documents\Code\C#\Chatty\Chatty-Server\obj\Debug\netcoreapp2.1\Chatty-Server.dll
-F:\Eduardo\Documents\Code\C#\Chatty\Chatty-Server\obj\Debug\netcoreapp2.1\Chatty-Server.pdb
+C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-Server\bin\Debug\netcoreapp2.1\Chatty-Server.deps.json
+C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-Server\bin\Debug\netcoreapp2.1\Chatty-Server.runtimeconfig.json
+C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-Server\bin\Debug\netcoreapp2.1\Chatty-Server.runtimeconfig.dev.json
+C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-Server\bin\Debug\netcoreapp2.1\Chatty-Server.dll
+C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-Server\bin\Debug\netcoreapp2.1\Chatty-Server.pdb
+C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-Server\obj\Debug\netcoreapp2.1\Chatty-Server.csproj.CoreCompileInputs.cache
+C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-Server\obj\Debug\netcoreapp2.1\Chatty-Server.AssemblyInfoInputs.cache
+C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-Server\obj\Debug\netcoreapp2.1\Chatty-Server.AssemblyInfo.cs
+C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-Server\obj\Debug\netcoreapp2.1\Chatty-Server.dll
+C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-Server\obj\Debug\netcoreapp2.1\Chatty-Server.pdb

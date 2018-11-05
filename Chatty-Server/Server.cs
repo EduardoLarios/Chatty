@@ -1,35 +1,33 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using System.Threading;
 
-namespace Chatty
+namespace ChattyServer
 {
     class Server
     {
         private static TcpListener serverSocket = default(TcpListener);
         private static Socket clientSocket = default(Socket);
 
-        // Sets the max number of clients that can be connected at
-        // any given time
-        private const int maxClientConnections = 20;
-        private static readonly ClientHandle[] clients = new ClientHandle[maxClientConnections];
+        private static readonly int maxConnections = 20;
+        private static readonly ClientHandler[] clients = new ClientHandler[maxConnections];
 
-        static void Main()
+        static void Main(string[] args)
         {
-            var ipServer = IPAddress.Any;
-            var serverPort = 8080;
-            // Sets the server address to 127.0.0.1 (localhost) and port to 8080 (TCP) and starts it
-            serverSocket = new TcpListener(ipServer, serverPort);
+            // Sets the max number of clients that can be connected at
+            // any given time, and initializes the server and client sockets
+            serverSocket = new TcpListener(IPAddress.Any, 8080);
             clientSocket = default(Socket);
             serverSocket.Start();
 
             while (true)
             {
                 // Listens for incoming connections via sockets
-                Console.WriteLine("Listening on IP Address: {0}\nPort: {1}", ipServer, serverPort);
+                Console.WriteLine("Listening on IP Address: {0}\nPort: {1}", "127.0.0.1", 8080);
                 Console.WriteLine("Waiting for connections...");
 
                 // Accepts socket and alerts of its connection
@@ -39,24 +37,24 @@ namespace Chatty
 
                 // Checks for each connection if it's a valid client
                 // otherwise creates a new ClientHandle thread for it
-                for (i = 0; i < maxClientConnections; i++)
+                for (i = 0; i < maxConnections; i++)
                 {
                     if (clients[i] == null)
                     {
-                        (clients[i] = new ClientHandle()).StartClient(clientSocket, clients);
+                        (clients[i] = new ClientHandler()).StartClient(clientSocket, clients);
                         break;
                     }
                 }
 
                 // If the server is at max capacity it closes the incoming socket and
                 // won't accept any more incoming connections
-                if (i == maxClientConnections)
+                if (i == maxConnections)
                 {
                     StreamWriter outs = new StreamWriter(new NetworkStream(clientSocket));
                     outs.AutoFlush = true;
 
                     // Alerts that the server is full
-                    outs.WriteLine("The server can't handle any more connections");
+                    outs.WriteLine("Waringin: The server can't handle any more connections");
                     outs.Close();
                     clientSocket.Close();
                 }
@@ -66,29 +64,29 @@ namespace Chatty
 
     // Handles a client's connection and its messages
     // Each client is its own thread
-    public class ClientHandle
+    public class ClientHandler
     {
         private Socket clientSocket;
-        private ClientHandle[] clients;
-        private int maxClientConnections;
+        private ClientHandler[] clients;
+        private int maxClientsCount;
         private string clientName;
         private StreamReader ins;
         private StreamWriter outs;
 
         // Initializes client and starts its thread
-        public void StartClient(Socket inClientSocket, ClientHandle[] clients)
+        public void StartClient(Socket clientSocket, ClientHandler[] clients)
         {
-            clientSocket = inClientSocket;
+            this.clientSocket = clientSocket;
             this.clients = clients;
-            maxClientConnections = clients.Length;
+            maxClientsCount = clients.Length;
 
             // Instanciates the thread
-            Thread chatThread = new Thread(CreateChat);
-            chatThread.Start();
+            Thread ctThread = new Thread(CreateChat);
+            ctThread.Start();
         }
 
         // Checks if the message is valid i.e no white spaces or not alphanumeric
-        private bool CheckValid(string msg)
+        private bool IsValid(string msg)
         {
             if (msg.Equals("") || msg.Equals("\n"))
             {
@@ -116,7 +114,7 @@ namespace Chatty
         private void CreateChat()
         {
             // This method is created for every client thread to manage its messages
-            int maxClientConnections = this.maxClientConnections;
+            int maxClientsCount = this.maxClientsCount;
             var clients = this.clients;
 
             // Tries to open connection with a client socket
@@ -124,15 +122,11 @@ namespace Chatty
             {
                 // Opens connection with a client socket
                 ins = new StreamReader(new NetworkStream(clientSocket));
-                outs = new StreamWriter(new NetworkStream(clientSocket))
+                outs = new StreamWriter(new NetworkStream(clientSocket));
                 // Flushes buffer after every call to StreamWriter.Write()
-                {
-                    AutoFlush = true
-                };
-
+                outs.AutoFlush = true;
                 string name;
 
-                // Asks for a name and checks its validity
                 do
                 {
                     outs.WriteLine("Please write a username: ");
@@ -140,7 +134,7 @@ namespace Chatty
 
                     // If the name is valid breaks out of the cycle, otherwise it keeps
                     // asking for a valid input
-                    if (CheckValid(name)) { break; }
+                    if (IsValid(name)) { break; }
                     else
                     {
                         outs.WriteLine("Invalid name: Must not contain special characters");
@@ -159,7 +153,6 @@ namespace Chatty
                 // until the next statements are complete
                 lock (this)
                 {
-                    // Formats the client name to look more "natural"
                     foreach (var client in clients)
                     {
                         if (client != null && client == this)
@@ -167,13 +160,14 @@ namespace Chatty
                             clientName = "@" + name;
                             break;
                         }
-
                     }
 
-                    // Notifies the rest of the clients of the new user
                     foreach (var client in clients)
                     {
-                        client.outs.WriteLine("New user connected: {0}", name);
+                        if (client != null && client != this)
+                        {
+                            client.outs.WriteLine("New user connected: {0}", name);
+                        }
                     }
                 }
 
@@ -182,7 +176,10 @@ namespace Chatty
                 {
                     // Checks if the message is invalid or a command
                     string line = ins.ReadLine();
-                    if (line.StartsWith("/quit")) break;
+                    if (line.StartsWith("/quit"))
+                    {
+                        break;
+                    }
 
                     // Lists all connected clients
                     if (line.StartsWith("/list"))
@@ -190,12 +187,17 @@ namespace Chatty
                         foreach (var client in clients)
                         {
                             if (client != null && client != this)
+                            {
                                 outs.WriteLine(client.clientName);
+                            }
                         }
                     }
 
                     // Validates message minimum lenght
-                    if (line.Length < 2) outs.WriteLine("Message is too short");
+                    if (line.Length < 2)
+                    {
+                        outs.WriteLine("Message is too short");
+                    }
 
                     // TODO: Add comments explaining this section
                     if (line.StartsWith("@"))
@@ -204,7 +206,7 @@ namespace Chatty
                         if (words.Length > 1 && words[1] != null)
                         {
                             words[1] = words[1].Trim();
-                            if (words[1].Length > 0)
+                            if (words[1].Any())
                             {
                                 lock (this)
                                 {
@@ -220,7 +222,6 @@ namespace Chatty
                                 }
                             }
                         }
-
                     }
 
                     else
@@ -232,12 +233,10 @@ namespace Chatty
                                 foreach (var client in clients)
                                 {
                                     if (client?.clientName != null)
-                                        client.outs.WriteLine("< {0} > {1}", name, line);
+                                        client.outs.WriteLine("\n{0}:\n{1}", name, line);
                                 }
-
                             }
                         }
-
                     }
                 }
 
@@ -256,11 +255,9 @@ namespace Chatty
                 // Bids farewell to the client
                 outs.WriteLine("Goodbye {0}", name);
 
-                // Clears the client that disconnected from the clients list
-                // Requires a lock to synchronize all the clients' states
                 lock (this)
                 {
-                    for (int i = 0; i < maxClientConnections; i++)
+                    for (int i = 0; i < maxClientsCount; i++)
                     {
                         if (clients[i] == this)
                         {
@@ -282,7 +279,7 @@ namespace Chatty
                 Console.WriteLine("Error: Could not stablish connection to the client");
                 Console.WriteLine(e.Message);
             }
+
         }
     }
 }
-    
