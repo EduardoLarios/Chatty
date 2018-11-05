@@ -3,7 +3,6 @@ C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Refclient\bin\Debug\netcoreapp2
 C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Refclient\bin\Debug\netcoreapp2.1\RefClient.runtimeconfig.dev.json
 C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Refclient\bin\Debug\netcoreapp2.1\RefClient.dll
 C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Refclient\bin\Debug\netcoreapp2.1\RefClient.pdb
-C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Refclient\obj\Debug\netcoreapp2.1\RefClient.csprojAssemblyReference.cache
 C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Refclient\obj\Debug\netcoreapp2.1\RefClient.csproj.CoreCompileInputs.cache
 C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Refclient\obj\Debug\netcoreapp2.1\RefClient.AssemblyInfoInputs.cache
 C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Refclient\obj\Debug\netcoreapp2.1\RefClient.AssemblyInfo.cs

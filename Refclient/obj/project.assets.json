@@ -687,9 +687,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Eduardo Larios\\Documents\\Code\\C#\\Chatty\\Refclient\\Refclient.csproj",
-      "projectName": "Refclient",
-      "projectPath": "C:\\Users\\Eduardo Larios\\Documents\\Code\\C#\\Chatty\\Refclient\\Refclient.csproj",
+      "projectUniqueName": "C:\\Users\\Eduardo Larios\\Documents\\Code\\C#\\Chatty\\Refclient\\Chatty-Client.csproj",
+      "projectName": "Chatty-Client",
+      "projectPath": "C:\\Users\\Eduardo Larios\\Documents\\Code\\C#\\Chatty\\Refclient\\Chatty-Client.csproj",
       "packagesPath": "C:\\Users\\Eduardo Larios\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Eduardo Larios\\Documents\\Code\\C#\\Chatty\\Refclient\\obj\\",
       "projectStyle": "PackageReference",
