@@ -1,0 +1,15 @@
+F:\Eduardo\Documents\Code\C#\Chatty\Client-UI\bin\Debug\Client-UI.exe.config
+F:\Eduardo\Documents\Code\C#\Chatty\Client-UI\bin\Debug\Client-UI.exe
+F:\Eduardo\Documents\Code\C#\Chatty\Client-UI\bin\Debug\Client-UI.pdb
+F:\Eduardo\Documents\Code\C#\Chatty\Client-UI\obj\Debug\Client-UI.csprojAssemblyReference.cache
+F:\Eduardo\Documents\Code\C#\Chatty\Client-UI\obj\Debug\MainWindow.g.cs
+F:\Eduardo\Documents\Code\C#\Chatty\Client-UI\obj\Debug\App.g.cs
+F:\Eduardo\Documents\Code\C#\Chatty\Client-UI\obj\Debug\Client-UI_MarkupCompile.cache
+F:\Eduardo\Documents\Code\C#\Chatty\Client-UI\obj\Debug\Client-UI_MarkupCompile.lref
+F:\Eduardo\Documents\Code\C#\Chatty\Client-UI\obj\Debug\MainWindow.baml
+F:\Eduardo\Documents\Code\C#\Chatty\Client-UI\obj\Debug\Client-UI.g.resources
+F:\Eduardo\Documents\Code\C#\Chatty\Client-UI\obj\Debug\Client_UI.Properties.Resources.resources
+F:\Eduardo\Documents\Code\C#\Chatty\Client-UI\obj\Debug\Client-UI.csproj.GenerateResource.cache
+F:\Eduardo\Documents\Code\C#\Chatty\Client-UI\obj\Debug\Client-UI.csproj.CoreCompileInputs.cache
+F:\Eduardo\Documents\Code\C#\Chatty\Client-UI\obj\Debug\Client-UI.exe
+F:\Eduardo\Documents\Code\C#\Chatty\Client-UI\obj\Debug\Client-UI.pdb
