@@ -1,28 +1,33 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 
 namespace Chatty
 {
-    internal static class Client
+    class Client
     {
         private static TcpClient client;
         private static StreamReader ins;
         private static StreamWriter outs;
 
-        private static void Main()
+        static void Main()
         {
-            // Tries to connect to the server, listening at localhost, port 7777
+            // Tries to connect to the server, listening at localhost, port 8080
             try
             {
-                // Creates a new TCP Client with IP: localhost and Port: 7777
-                client = new TcpClient("0.0.0.0", 7777);
+                var clientAddress = "127.0.0.1";
+                var clientPort = 8080;
+                Console.WriteLine("Looking for server on IP Address: {0}\nPort: {1}", clientAddress, clientPort);
+                Console.WriteLine("Trying to connect to the server...\n");
+
+                // Creates a new TCP Client with IP: localhost and Port: 8080 (TCP)
+                client = new TcpClient(clientAddress, clientPort);
                 ins = new StreamReader(client.GetStream());
-                outs = new StreamWriter(client.GetStream())
-                {
-                    // Flushes buffer after every call to StreamWriter.Write()
-                    AutoFlush = true
-                };
+                outs = new StreamWriter(client.GetStream());
+                // Flushes buffer after every call to StreamWriter.Write()
+                outs.AutoFlush = true;
             }
 
             // Catches exception if the connection to the server fails
@@ -40,7 +45,20 @@ namespace Chatty
                 try
                 {
                     var cli = new CThread(client, ins, outs);
+                    Thread chatThread = new Thread(cli.Run);
+                    chatThread.Start();
+
+                    while (!cli.closed)
+                    {
+                        string msg = Console.ReadLine().Trim();
+                        outs.WriteLine(msg);
+                    }
+
+                    outs.Close();
+                    ins.Close();
+                    client.Close();
                 }
+
                 catch (Exception e)
                 {
                     // Catches exception and prints the error to console
@@ -52,8 +70,9 @@ namespace Chatty
         }
     }
 
-    internal class CThread
+    class CThread
     {
+        public bool closed = false;
         private TcpClient client;
         private StreamReader ins;
         private StreamWriter outs;
@@ -78,12 +97,20 @@ namespace Chatty
                     {
                         break;
                     }
+
+                    //if (response.IndexOf("Goodbye") != -1)
+                    //{
+                    //    break;
+                    //}
                 }
+
+                closed = true;
             }
 
             catch (Exception e)
             {
                 // Catches exception and prints its message
+                Console.WriteLine("Error: Connection closed unexpectedly");
                 Console.WriteLine(e.Message);
             }
 

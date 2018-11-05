@@ -7,27 +7,29 @@ using System.Threading;
 
 namespace Chatty
 {
-    internal static class Server
+    class Server
     {
-        private static TcpListener serverSocket;
-        private static Socket clientSocket;
+        private static TcpListener serverSocket = default(TcpListener);
+        private static Socket clientSocket = default(Socket);
 
         // Sets the max number of clients that can be connected at
         // any given time
         private const int maxClientConnections = 20;
         private static readonly ClientHandle[] clients = new ClientHandle[maxClientConnections];
 
-        private static void Main()
+        static void Main()
         {
-            // Sets the server address and port to listen to and starts the server
-            serverSocket = new TcpListener(IPAddress.Any, 7777);
+            var ipServer = IPAddress.Any;
+            var serverPort = 8080;
+            // Sets the server address to 127.0.0.1 (localhost) and port to 8080 (TCP) and starts it
+            serverSocket = new TcpListener(ipServer, serverPort);
             clientSocket = default(Socket);
             serverSocket.Start();
 
             while (true)
             {
                 // Listens for incoming connections via sockets
-                Console.WriteLine("Listening on IP Address: {0}\nPort: {1}", IPAddress.Any, 7777);
+                Console.WriteLine("Listening on IP Address: {0}\nPort: {1}", ipServer, serverPort);
                 Console.WriteLine("Waiting for connections...");
 
                 // Accepts socket and alerts of its connection
@@ -50,11 +52,8 @@ namespace Chatty
                 // won't accept any more incoming connections
                 if (i == maxClientConnections)
                 {
-                    StreamWriter outs = new StreamWriter(new NetworkStream(clientSocket))
-                    {
-                        // Flushes buffer after every call to StreamWriter.Write()
-                        AutoFlush = true
-                    };
+                    StreamWriter outs = new StreamWriter(new NetworkStream(clientSocket));
+                    outs.AutoFlush = true;
 
                     // Alerts that the server is full
                     outs.WriteLine("The server can't handle any more connections");
@@ -63,208 +62,227 @@ namespace Chatty
                 }
             }
         }
+    }
 
-        // Handles a client's connection and its messages
-        // Each client is its own thread
-        internal class ClientHandle
+    // Handles a client's connection and its messages
+    // Each client is its own thread
+    public class ClientHandle
+    {
+        private Socket clientSocket;
+        private ClientHandle[] clients;
+        private int maxClientConnections;
+        private string clientName;
+        private StreamReader ins;
+        private StreamWriter outs;
+
+        // Initializes client and starts its thread
+        public void StartClient(Socket inClientSocket, ClientHandle[] clients)
         {
-            private Socket clientSocket;
-            private ClientHandle[] clients;
-            private int maxClientConnections;
-            private string clientName;
-            private StreamReader ins;
-            private StreamWriter outs;
+            clientSocket = inClientSocket;
+            this.clients = clients;
+            maxClientConnections = clients.Length;
 
-            // Initializes client and starts its thread
-            public void StartClient(Socket inClientSocket, ClientHandle[] clients)
+            // Instanciates the thread
+            Thread chatThread = new Thread(CreateChat);
+            chatThread.Start();
+        }
+
+        // Checks if the message is valid i.e no white spaces or not alphanumeric
+        private bool CheckValid(string msg)
+        {
+            if (msg.Equals("") || msg.Equals("\n"))
             {
-                clientSocket = inClientSocket;
-                this.clients = clients;
-                maxClientConnections = clients.Length;
-
-                // Instanciates the thread
-                Thread chatThread = new Thread(CreateChat);
-                chatThread.Start();
+                return false;
             }
 
-            // Checks if the message is valid i.e no white spaces and it's alphanumeric
-            private bool CheckValid(string msg)
+            foreach (var letter in msg)
             {
-                if (msg.Equals("") || msg.Equals("\n"))
+                if (!char.IsLetterOrDigit(letter))
                 {
                     return false;
                 }
+            }
 
-                foreach (var letter in msg)
+            return true;
+        }
+
+        // Checks if the message is a valid command i.e /list or /quit
+        private bool IsCommand(string msg)
+        {
+            return msg.Equals("/list") || msg.Equals("/quit") || msg.Equals("") || msg.Equals("\n");
+        }
+
+        // Creates a new chat instance
+        private void CreateChat()
+        {
+            // This method is created for every client thread to manage its messages
+            int maxClientConnections = this.maxClientConnections;
+            var clients = this.clients;
+
+            // Tries to open connection with a client socket
+            try
+            {
+                // Opens connection with a client socket
+                ins = new StreamReader(new NetworkStream(clientSocket));
+                outs = new StreamWriter(new NetworkStream(clientSocket))
+                // Flushes buffer after every call to StreamWriter.Write()
                 {
-                    if (!char.IsLetterOrDigit(letter))
+                    AutoFlush = true
+                };
+
+                string name;
+
+                // Asks for a name and checks its validity
+                do
+                {
+                    outs.WriteLine("Please write a username: ");
+                    name = ins.ReadLine().Trim();
+
+                    // If the name is valid breaks out of the cycle, otherwise it keeps
+                    // asking for a valid input
+                    if (CheckValid(name)) { break; }
+                    else
                     {
-                        return false;
+                        outs.WriteLine("Invalid name: Must not contain special characters");
+                        name = null;
+                    }
+
+                } while (true);
+
+                // The server sends a welcome message to the user
+                Console.WriteLine("User: {0} connected successfully", name);
+                // Explains to the user the valid commands
+                outs.WriteLine("\nWelcome {0}\nTo exit type: /quit on a new line", name);
+                outs.WriteLine("To list connected users type: /list");
+
+                // The lock is used to synchronize the statement by holding the object (ClientHandle) blocked 
+                // until the next statements are complete
+                lock (this)
+                {
+                    // Formats the client name to look more "natural"
+                    foreach (var client in clients)
+                    {
+                        if (client != null && client == this)
+                        {
+                            clientName = "@" + name;
+                            break;
+                        }
+
+                    }
+
+                    // Notifies the rest of the clients of the new user
+                    foreach (var client in clients)
+                    {
+                        client.outs.WriteLine("New user connected: {0}", name);
                     }
                 }
 
-                return true;
-            }
-
-            // Checks if the message is a valid command i.e /list or /quit
-            private bool IsCommand(string msg)
-            {
-                return msg.Equals("/list") || msg.Equals("/quit") || msg.Equals("") || msg.Equals("\n");
-            }
-
-            // Creates a new chat instance
-            private void CreateChat()
-            {
-                // This method is created for every client thread to manage its messages
-                int maxClientConnections = this.maxClientConnections;
-                var clients = this.clients;
-
-                // Tries to open connection with a client socket
-                try
+                // Handles messages incoming from the client
+                while (true)
                 {
-                    // Opens connection with a client socket
-                    ins = new StreamReader(new NetworkStream(clientSocket));
-                    outs = new StreamWriter(new NetworkStream(clientSocket))
-                    // Flushes buffer after every call to StreamWriter.Write()
+                    // Checks if the message is invalid or a command
+                    string line = ins.ReadLine();
+                    if (line.StartsWith("/quit")) break;
+
+                    // Lists all connected clients
+                    if (line.StartsWith("/list"))
                     {
-                        AutoFlush = true
-                    };
-                    string name;
-
-                    // Asks for a name and checks its validity
-                    while (true)
-                    {
-                        outs.WriteLine("Please write your name");
-                        name = ins.ReadLine().Trim();
-
-                        // If the name is valid breaks out of the cycle, otherwise it keeps
-                        // asking for a valid input
-                        if (CheckValid(name)) { break; }
-                        else
-                        {
-                            outs.WriteLine("Invalid name: Must not contain special characters");
-                            name = null;
-                        }
-
-                    }
-
-                    // The server sends a welcome message to the user
-                    Console.WriteLine("User: {0} connected successfully", name);
-                    // Explains to the user the valid commands
-                    outs.WriteLine("Welcome {0}\nTo exit type: /quit on a new line", name);
-                    outs.WriteLine("To list connected users type: /list");
-
-                    // The lock is used to synchronize the statement by holding the object (ClientHandle) blocked 
-                    // until the next statements are complete
-                    lock (this)
-                    {
-                        // Formats the client name to look more "natural"
                         foreach (var client in clients)
                         {
-                            if (client != null && client == this)
-                            {
-                                clientName = $"@{name}";
-                                break;
-                            }
-
-                        }
-
-                        // Notifies the rest of the clients of the new user
-                        foreach (var client in clients)
-                        {
-                            client.outs.WriteLine("New user connected: {0}", name);
+                            if (client != null && client != this)
+                                outs.WriteLine(client.clientName);
                         }
                     }
 
-                    // Handles messages incoming from the client
-                    while (true)
+                    // Validates message minimum lenght
+                    if (line.Length < 2) outs.WriteLine("Message is too short");
+
+                    // TODO: Add comments explaining this section
+                    if (line.StartsWith("@"))
                     {
-                        // Checks if the message is invalid or a command
-                        string line = ins.ReadLine();
-                        if (line.StartsWith("/quit")) break;
-
-                        // Lists all connected clients
-                        if (line.StartsWith("/list"))
+                        var words = Regex.Split(line, "\\s");
+                        if (words.Length > 1 && words[1] != null)
                         {
-                            foreach (var client in clients)
+                            words[1] = words[1].Trim();
+                            if (words[1].Length > 0)
                             {
-                                if (client != null && client != this)
-                                    outs.WriteLine(client.clientName);
-                            }
-                        }
-
-                        // Validates message minimum lenght
-                        if (line.Length < 2) outs.WriteLine("Message is too short");
-
-                        // TODO: Add comments explaining this section
-                        if (line.StartsWith("@"))
-                        {
-                            var words = Regex.Split(line, "\\s");
-                            if (words.Length > 1 && words[1] != null)
-                            {
-                                words[1] = words[1].Trim();
-                                if (words[1].Length > 0)
+                                lock (this)
                                 {
-                                    lock (this)
+                                    foreach (var client in clients)
                                     {
-                                        foreach (var client in clients)
+                                        if (client != null && client != this && client.clientName?.Equals(words[0]) == true)
                                         {
-                                            if (client != null && client != this && client.clientName?.Equals(words[0]) == true)
-                                            {
-                                                client.outs.WriteLine("< {0} > {1}", name, words[1]);
-                                                outs.WriteLine("> {0} > {1}", name, words[1]);
-                                                break;
-                                            }
+                                            client.outs.WriteLine("< {0} > {1}", name, words[1]);
+                                            outs.WriteLine("> {0} > {1}", name, words[1]);
+                                            break;
                                         }
                                     }
                                 }
                             }
-
                         }
 
-                        else
-                        {
-                            lock (this)
-                            {
-                                if (!IsCommand(line))
-                                {
-                                    foreach (var client in clients)
-                                    {
-                                        if (client?.clientName != null)
-                                            client.outs.WriteLine("< {0} > {1}", name, line);
-                                    }
-
-                                }
-                            }
-
-                        }
                     }
 
-                    // User disconnected notification
-                    Console.WriteLine("User: {0} disconnected from the lobby", name);
-                    lock (this)
+                    else
                     {
-                        // Notifies clients of user disconnection
-                        foreach (var client in clients)
+                        lock (this)
                         {
-                            if (client != null)
-                                client.outs.WriteLine("User {0} has disconnected", name);
+                            if (!IsCommand(line))
+                            {
+                                foreach (var client in clients)
+                                {
+                                    if (client?.clientName != null)
+                                        client.outs.WriteLine("< {0} > {1}", name, line);
+                                }
+
+                            }
+                        }
+
+                    }
+                }
+
+                // User disconnected notification
+                Console.WriteLine("User: {0} disconnected from the lobby", name);
+                lock (this)
+                {
+                    // Notifies clients of user disconnection
+                    foreach (var client in clients)
+                    {
+                        if (client != null)
+                            client.outs.WriteLine("User {0} has disconnected", name);
+                    }
+                }
+
+                // Bids farewell to the client
+                outs.WriteLine("Goodbye {0}", name);
+
+                // Clears the client that disconnected from the clients list
+                // Requires a lock to synchronize all the clients' states
+                lock (this)
+                {
+                    for (int i = 0; i < maxClientConnections; i++)
+                    {
+                        if (clients[i] == this)
+                        {
+                            clients[i] = null;
                         }
                     }
-
-                    // Bids farewell to the client
-                    outs.WriteLine("Goodbye {0}", name);
-
-
                 }
 
-                // Catches the failure to connect to a client
-                catch (Exception e)
-                {
-                    Console.WriteLine("Error: Could not stablish connection to the client");
-                    Console.WriteLine(e.Message);
-                }
+                // Closes the socket to the client
+                ins.Close();
+                outs.Close();
+                clientSocket.Close();
+
+            }
+
+            // Catches the failure to connect to a client
+            catch (Exception e)
+            {
+                Console.WriteLine("Error: Could not stablish connection to the client");
+                Console.WriteLine(e.Message);
             }
         }
     }
 }
+    

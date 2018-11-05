@@ -687,11 +687,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\Eduardo\\Documents\\Code\\C#\\Chatty\\Chatty-Client\\Chatty-Client.csproj",
+      "projectUniqueName": "C:\\Users\\Eduardo Larios\\Documents\\Code\\C#\\Chatty\\Chatty-Client\\Chatty-Client.csproj",
       "projectName": "Chatty-Client",
-      "projectPath": "F:\\Eduardo\\Documents\\Code\\C#\\Chatty\\Chatty-Client\\Chatty-Client.csproj",
+      "projectPath": "C:\\Users\\Eduardo Larios\\Documents\\Code\\C#\\Chatty\\Chatty-Client\\Chatty-Client.csproj",
       "packagesPath": "C:\\Users\\Eduardo Larios\\.nuget\\packages\\",
-      "outputPath": "F:\\Eduardo\\Documents\\Code\\C#\\Chatty\\Chatty-Client\\obj\\",
+      "outputPath": "C:\\Users\\Eduardo Larios\\Documents\\Code\\C#\\Chatty\\Chatty-Client\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
