@@ -4,12 +4,25 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="MainWindow" Height="550" Width="800">
+        Title="Chatty-Client" Height="550" Width="800">
     <Grid>
         <Border Padding="20">
             <StackPanel>
-                <TextBlock Margin="25 0 0 0" Text="Connected to Server at 127.0.0.1" FontSize="16" Padding="0 0 0 10" FontWeight="Bold"></TextBlock>
-                <TextBlock Margin="25 0 0 0" Text="Thread: " Padding="0 0 0 10"></TextBlock>
+
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel>
+                        <TextBlock x:Name="ConnectBanner" Margin="25 0 0 0" Text="Connected to Server at 127.0.0.1" FontSize="16" Padding="0 0 0 10" FontWeight="Bold"></TextBlock>
+                        <TextBlock Margin="25 0 0 0" Text="Thread: " Padding="0 0 0 10"></TextBlock>
+                    </StackPanel>
+                    
+                    <Button Click="Start_Client" Margin="20 10 25 10" Height="40" Content="Connect" Grid.Column="1"></Button>
+                </Grid>
+
                 <RichTextBox IsReadOnly="True" Height="280" Width="700" Background="AliceBlue"></RichTextBox>
 
                 <TextBlock Text="Message: " Margin="25 10 0 0"></TextBlock>

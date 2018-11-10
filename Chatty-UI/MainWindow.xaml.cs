@@ -24,5 +24,16 @@ namespace Chatty_UI
         {
             InitializeComponent();
         }
+
+        private void Start_Client(object sender, RoutedEventArgs e)
+        {
+            ConnectBanner.Text = "Connecting to Server!";
+            var cli = new Client();
+            if(cli != null)
+            {
+                ConnectBanner.Text = "Connection Established";
+                cli.ConnectToServer();
+            }
+        }
     }
 }

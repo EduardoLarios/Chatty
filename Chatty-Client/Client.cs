@@ -9,8 +9,8 @@ class Client
     private static StreamReader ins;
     private static StreamWriter outs;
 
-
-    static void Main(string[] args)
+    // Encapsulates the logic to connect to the server
+    public static void ConnectToServer()
     {
         // Tries to connect to the server, listening at localhost, port 8080
         try
@@ -66,11 +66,15 @@ class Client
             }
         }
     }
+
+    static void Main(string[] args)
+    {
+        ConnectToServer();
+    }
 }
 
 class CThread
 {
-
     public bool closed = false;
     private TcpClient client;
     private StreamReader ins;
