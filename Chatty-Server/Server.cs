@@ -54,7 +54,7 @@ namespace ChattyServer
                     outs.AutoFlush = true;
 
                     // Alerts that the server is full
-                    outs.WriteLine("Waringin: The server can't handle any more connections");
+                    outs.WriteLine("Warning: The server can't handle any more connections");
                     outs.Close();
                     clientSocket.Close();
                 }
@@ -127,7 +127,7 @@ namespace ChattyServer
                 outs.AutoFlush = true;
                 string name;
 
-                do
+                while (true)
                 {
                     outs.WriteLine("Please write a username: ");
                     name = ins.ReadLine().Trim();
@@ -141,7 +141,7 @@ namespace ChattyServer
                         name = null;
                     }
 
-                } while (true);
+                }
 
                 // The server sends a welcome message to the user
                 Console.WriteLine("User: {0} connected successfully", name);

@@ -12,3 +12,17 @@ C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-UI\obj\Debug\Chatty-UI.c
 C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-UI\obj\Debug\Chatty-UI.csproj.CoreCompileInputs.cache
 C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-UI\obj\Debug\Chatty-UI.exe
 C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-UI\obj\Debug\Chatty-UI.pdb
+F:\Eduardo\Documents\Code\C#\Chatty\Chatty-UI\bin\Debug\Chatty-UI.exe.config
+F:\Eduardo\Documents\Code\C#\Chatty\Chatty-UI\bin\Debug\Chatty-UI.exe
+F:\Eduardo\Documents\Code\C#\Chatty\Chatty-UI\bin\Debug\Chatty-UI.pdb
+F:\Eduardo\Documents\Code\C#\Chatty\Chatty-UI\obj\Debug\Chatty-UI.csprojAssemblyReference.cache
+F:\Eduardo\Documents\Code\C#\Chatty\Chatty-UI\obj\Debug\MainWindow.baml
+F:\Eduardo\Documents\Code\C#\Chatty\Chatty-UI\obj\Debug\MainWindow.g.cs
+F:\Eduardo\Documents\Code\C#\Chatty\Chatty-UI\obj\Debug\App.g.cs
+F:\Eduardo\Documents\Code\C#\Chatty\Chatty-UI\obj\Debug\Chatty-UI_MarkupCompile.cache
+F:\Eduardo\Documents\Code\C#\Chatty\Chatty-UI\obj\Debug\Chatty-UI.g.resources
+F:\Eduardo\Documents\Code\C#\Chatty\Chatty-UI\obj\Debug\Chatty_UI.Properties.Resources.resources
+F:\Eduardo\Documents\Code\C#\Chatty\Chatty-UI\obj\Debug\Chatty-UI.csproj.GenerateResource.cache
+F:\Eduardo\Documents\Code\C#\Chatty\Chatty-UI\obj\Debug\Chatty-UI.csproj.CoreCompileInputs.cache
+F:\Eduardo\Documents\Code\C#\Chatty\Chatty-UI\obj\Debug\Chatty-UI.exe
+F:\Eduardo\Documents\Code\C#\Chatty\Chatty-UI\obj\Debug\Chatty-UI.pdb

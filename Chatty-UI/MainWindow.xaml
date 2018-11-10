@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Chatty-Client" Height="550" Width="800">
+        Title="Chatty-Client" Height="600" Width="800">
     <Grid>
         <Border Padding="20">
             <StackPanel>
@@ -16,14 +16,14 @@
                     </Grid.ColumnDefinitions>
 
                     <StackPanel>
-                        <TextBlock x:Name="ConnectBanner" Margin="25 0 0 0" Text="Connected to Server at 127.0.0.1" FontSize="16" Padding="0 0 0 10" FontWeight="Bold"></TextBlock>
+                        <TextBlock x:Name="ConnectBanner" Height="50" Margin="25 0 0 0" Text="Not Connected" FontSize="16" Padding="0 0 0 10" FontWeight="Bold"></TextBlock>
                         <TextBlock Margin="25 0 0 0" Text="Thread: " Padding="0 0 0 10"></TextBlock>
                     </StackPanel>
                     
-                    <Button Click="Start_Client" Margin="20 10 25 10" Height="40" Content="Connect" Grid.Column="1"></Button>
+                    <Button x:Name="ConnectButton" Click="Start_Client" Margin="20 10 25 10" Height="40" Content="Connect" Grid.Column="1"></Button>
                 </Grid>
 
-                <RichTextBox IsReadOnly="True" Height="280" Width="700" Background="AliceBlue"></RichTextBox>
+                <TextBlock x:Name="ChatBox" Height="280" Width="700" Background="AliceBlue" Text=""></TextBlock>
 
                 <TextBlock Text="Message: " Margin="25 10 0 0"></TextBlock>
                 <Grid >
@@ -32,8 +32,8 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBox Grid.Column="0" Height="40" Padding="5" FontSize="16" Margin="25 10 20 0" Background="AliceBlue"></TextBox>
-                    <Button Content="Send" Grid.Column="1" Margin="20 10 25 0"></Button>
+                    <TextBox x:Name="MessageBox" Grid.Column="0" Height="40" Padding="5" FontSize="16" Margin="25 10 20 0" Background="AliceBlue"></TextBox>
+                    <Button Click="Send_Click" Content="Send" Grid.Column="1" Margin="20 10 25 0"></Button>
 
                 </Grid>
 

@@ -3,7 +3,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 
-class Client
+static class Client
 {
     private static TcpClient client;
     private static StreamReader ins;
@@ -40,12 +40,12 @@ class Client
         {
             try
             {
-                CThread cli = new CThread(client, ins, outs);
-                Thread ctThread = new Thread(cli.Run);
-                ctThread.Start();
+                CThread chat = new CThread(client, ins, outs);
+                //Thread ctThread = new Thread(chat.Run);
+                chat.Run();
 
                 // Keeps reading messages from the server while it's open
-                while (!cli.closed)
+                while (!chat.closed)
                 {
                     string msg = Console.ReadLine().Trim();
                     outs.WriteLine(msg);
@@ -67,7 +67,7 @@ class Client
         }
     }
 
-    static void Main(string[] args)
+    static void Main()
     {
         ConnectToServer();
     }
@@ -75,7 +75,7 @@ class Client
 
 class CThread
 {
-    public bool closed = false;
+    public bool closed;
     private TcpClient client;
     private StreamReader ins;
     private StreamWriter outs;
