@@ -16,14 +16,15 @@
                     </Grid.ColumnDefinitions>
 
                     <StackPanel>
-                        <TextBlock x:Name="ConnectBanner" Height="50" Margin="25 0 0 0" Text="Not Connected" FontSize="16" Padding="0 0 0 10" FontWeight="Bold"></TextBlock>
+                        <TextBlock x:Name="ConnectBanner" Margin="25 0 0 0" Text="Not Connected" FontSize="16" Padding="0 0 0 10" FontWeight="Bold"></TextBlock>
                         <TextBlock Margin="25 0 0 0" Text="Thread: " Padding="0 0 0 10"></TextBlock>
                     </StackPanel>
-                    
+
                     <Button x:Name="ConnectButton" Click="Start_Client" Margin="20 10 25 10" Height="40" Content="Connect" Grid.Column="1"></Button>
                 </Grid>
 
-                <TextBlock x:Name="ChatBox" Height="280" Width="700" Background="AliceBlue" Text=""></TextBlock>
+
+                <TextBlock x:Name="ChatBox" Height="280" Width="700" Background="AliceBlue" Text="" FontSize="14" TextWrapping="Wrap"></TextBlock>
 
                 <TextBlock Text="Message: " Margin="25 10 0 0"></TextBlock>
                 <Grid >
@@ -32,19 +33,22 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBox x:Name="MessageBox" Grid.Column="0" Height="40" Padding="5" FontSize="16" Margin="25 10 20 0" Background="AliceBlue"></TextBox>
-                    <Button Click="Send_Click" Content="Send" Grid.Column="1" Margin="20 10 25 0"></Button>
+                    <TextBox x:Name="MessageBox" Grid.Column="0" Height="40" Padding="5" FontSize="16" Margin="25 10 20 0" Background="AliceBlue" KeyDown="EnterSend"></TextBox>
+                    <Button x:Name="SendButton" Click="Send_Click" Content="Send" Grid.Column="1" Margin="20 10 25 0"></Button>
 
                 </Grid>
 
-                <Grid >
+                <Grid Margin="20">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="238*" />
+                        <ColumnDefinition Width="238*" />
+                        <ColumnDefinition Width="27*"/>
+                        <ColumnDefinition Width="210*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Button Margin="25 10 20 0 " Content="Exit" Grid.Column="0" Height="40"></Button>
-                    <Button Margin="20 10 25 0 " Content="Members" Grid.Column="1"></Button>
+                    <Button Margin="5,5,5,5" Click="Exit_Click" Content="Exit" Grid.Column="0" Height="40"></Button>
+                    <Button Margin="5,5,5,5" Click="List_Click" Content="Members" Grid.Column="1" Height="40"></Button>
+                    <Button Margin="5,5,5,5" Click="ClearChat" Content="Clear Chat" Grid.Column="2" Height="40" Grid.ColumnSpan="2"></Button>
                 </Grid>
             </StackPanel>
         </Border>

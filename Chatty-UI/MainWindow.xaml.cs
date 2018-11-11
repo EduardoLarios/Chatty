@@ -18,12 +18,38 @@ namespace Chatty_UI
 
         private void Start_Client(object sender, RoutedEventArgs e)
         {
-            Client.ConnectToServer(ConnectBanner, ConnectButton);
+            Client.ConnectToServer(ConnectBanner, ConnectButton, SendButton);
         }
 
         private void Send_Click(object sender, RoutedEventArgs e)
         {
+            SendButton.Content = "Send";
+            ConnectBanner.Text = "Connected to Server";
             Client.ListenForMessages(ConnectBanner, MessageBox, ChatBox);
+        }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            Client.CallExit(ConnectBanner, ChatBox);
+        }
+
+        private void List_Click(object sender, RoutedEventArgs e)
+        {
+            Client.CallList(ConnectBanner, ChatBox);
+        }
+
+        private void EnterSend(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                Send_Click(sender, e);
+            }
+
+        }
+
+        private void ClearChat(object sender, RoutedEventArgs e)
+        {
+            ChatBox.Text = "";
         }
     }
 
@@ -34,7 +60,7 @@ namespace Chatty_UI
         private static StreamWriter outs;
 
         // Encapsulates the logic to connect to the server
-        public static void ConnectToServer(TextBlock ConnectBanner, Button ConnectButton)
+        public static void ConnectToServer(TextBlock ConnectBanner, Button ConnectButton, Button SendButton)
         {
             // Tries to connect to the server, listening at localhost, port 8080
             try
@@ -56,14 +82,14 @@ namespace Chatty_UI
             {
                 ConnectBanner.Text += "Error: Could not stablish connection to the server";
                 ConnectButton.Content = "Try Again";
-                //Console.WriteLine("Error: Could not stablish connection to the server");
+
+                Console.WriteLine("Error: Could not stablish connection to the server");
                 Console.WriteLine(e.Message);
                 Console.ReadLine();
             }
 
-            // Checks that the client creation was correct and throws and exception in case
-            // an error occurs during its creation
-            //ListenForMessages();
+            ConnectBanner.Text = "Please type your username in the chatbox: ";
+            SendButton.Content = "Confirm";
         }
 
         // Checks that the client creation was correct and throws and exception in case
@@ -74,31 +100,87 @@ namespace Chatty_UI
             {
                 try
                 {
-                    CThread chat = new CThread(client, ins, outs, ChatBox, ConnectBanner);
-                    //Thread ctThread = new Thread(chat.Run);
-                    //ctThread.Start();
-                    chat.Run();
+                    ChatThread chat = new ChatThread(client, ins, outs, ChatBox, ConnectBanner);
+                    Thread ctThread = new Thread(chat.Run);
+                    ctThread.Start();
 
                     // Keeps reading messages from the server while it's open
-                    while (!chat.closed)
+                    if (!chat.closed)
                     {
                         string msg = MessageBox.Text;
-                        //string msg = Console.ReadLine().Trim();
                         outs.WriteLine(msg);
                         MessageBox.Text = "";
                     }
-
-                    // Closes the connection when it receives the signal to close
-                    outs.Close();
-                    ins.Close();
-                    client.Close();
                 }
 
                 catch (Exception e)
                 {
                     // Catches exception and prints the error to console
                     ConnectBanner.Text = "Error: Could not create client\n";
-                    //Console.WriteLine("Error: Could not create client");
+
+                    Console.WriteLine("Error: Could not create client");
+                    Console.WriteLine(e.Message);
+                    Console.ReadLine();
+                }
+            }
+        }
+
+        public static void CallExit(TextBlock ConnectBanner, TextBlock ChatBox)
+        {
+            if (client != null && outs != null && ins != null)
+            {
+                try
+                {
+                    ChatThread chat = new ChatThread(client, ins, outs, ChatBox, ConnectBanner);
+                    Thread ctThread = new Thread(chat.Run);
+                    ctThread.Start();
+
+                    // Keeps reading messages from the server while it's open
+                    if (!chat.closed)
+                    {
+                        const string msg = "/quit";
+                        //string msg = Console.ReadLine().Trim();
+                        outs.WriteLine(msg);
+                    }
+                }
+
+                catch (Exception e)
+                {
+                    // Catches exception and prints the error to console
+                    ConnectBanner.Text = "Error: Could not create client\n";
+
+                    Console.WriteLine("Error: Could not create client");
+                    Console.WriteLine(e.Message);
+                    Console.ReadLine();
+                }
+            }
+        }
+
+        public static void CallList(TextBlock ConnectBanner, TextBlock ChatBox)
+        {
+            if (client != null && outs != null && ins != null)
+            {
+                try
+                {
+                    ChatThread chat = new ChatThread(client, ins, outs, ChatBox, ConnectBanner);
+                    Thread ctThread = new Thread(chat.Run);
+                    ctThread.Start();
+
+                    // Keeps reading messages from the server while it's open
+                    if (!chat.closed)
+                    {
+                        const string msg = "/list";
+                        //string msg = Console.ReadLine().Trim();
+                        outs.WriteLine(msg);
+                    }
+                }
+
+                catch (Exception e)
+                {
+                    // Catches exception and prints the error to console
+                    ConnectBanner.Text = "Error: Could not create client\n";
+
+                    Console.WriteLine("Error: Could not create client");
                     Console.WriteLine(e.Message);
                     Console.ReadLine();
                 }
@@ -106,7 +188,7 @@ namespace Chatty_UI
         }
     }
 
-    class CThread
+    class ChatThread
     {
         public bool closed;
         private TcpClient client;
@@ -115,7 +197,7 @@ namespace Chatty_UI
         private TextBlock chatBox;
         private TextBlock connectBanner;
 
-        public CThread(TcpClient client, StreamReader ins, StreamWriter outs, TextBlock chatBox, TextBlock connectBanner)
+        public ChatThread(TcpClient client, StreamReader ins, StreamWriter outs, TextBlock chatBox, TextBlock connectBanner)
         {
             this.client = client;
             this.ins = ins;
@@ -132,8 +214,7 @@ namespace Chatty_UI
                 // Listens for the server to terminate the connection
                 while ((responseLine = ins.ReadLine()) != null)
                 {
-                    //chatBox.Dispatcher.Invoke(new Action(() => chatBox.Text += responseLine + "\n"));
-                    Console.WriteLine(responseLine);
+                    chatBox.Dispatcher.Invoke(new Action(() => chatBox.Text += "  " + responseLine + "\n"));
                     if (responseLine.Contains("Goodbye"))
                     {
                         break;
@@ -146,12 +227,12 @@ namespace Chatty_UI
             catch (Exception e)
             {
                 // Catches exception and prints its message
-                //connectBanner.Dispatcher.Invoke(new Action(() => connectBanner.Text = "Error: Connection closed unexpectedly"));
+                connectBanner.Dispatcher.Invoke(new Action(() => connectBanner.Text = "Error: Connection closed unexpectedly"));
                 Console.WriteLine("Error: Connection closed unexpectedly");
                 Console.WriteLine(e.Message);
             }
 
             Environment.Exit(0);
-        } 
+        }
     }
 }

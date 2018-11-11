@@ -41,8 +41,8 @@ static class Client
             try
             {
                 CThread chat = new CThread(client, ins, outs);
-                //Thread ctThread = new Thread(chat.Run);
-                chat.Run();
+                Thread ctThread = new Thread(chat.Run);
+                ctThread.Start();
 
                 // Keeps reading messages from the server while it's open
                 while (!chat.closed)

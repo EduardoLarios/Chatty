@@ -9,3 +9,14 @@ C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-Client\obj\Debug\netcore
 C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-Client\obj\Debug\netcoreapp2.1\Chatty-Client.AssemblyInfo.cs
 C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-Client\obj\Debug\netcoreapp2.1\Chatty-Client.dll
 C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-Client\obj\Debug\netcoreapp2.1\Chatty-Client.pdb
+F:\Eduardo\Documents\Code\C#\Chatty\Chatty-Client\bin\Debug\netcoreapp2.1\Chatty-Client.deps.json
+F:\Eduardo\Documents\Code\C#\Chatty\Chatty-Client\bin\Debug\netcoreapp2.1\Chatty-Client.runtimeconfig.json
+F:\Eduardo\Documents\Code\C#\Chatty\Chatty-Client\bin\Debug\netcoreapp2.1\Chatty-Client.runtimeconfig.dev.json
+F:\Eduardo\Documents\Code\C#\Chatty\Chatty-Client\bin\Debug\netcoreapp2.1\Chatty-Client.dll
+F:\Eduardo\Documents\Code\C#\Chatty\Chatty-Client\bin\Debug\netcoreapp2.1\Chatty-Client.pdb
+F:\Eduardo\Documents\Code\C#\Chatty\Chatty-Client\obj\Debug\netcoreapp2.1\Chatty-Client.csprojAssemblyReference.cache
+F:\Eduardo\Documents\Code\C#\Chatty\Chatty-Client\obj\Debug\netcoreapp2.1\Chatty-Client.csproj.CoreCompileInputs.cache
+F:\Eduardo\Documents\Code\C#\Chatty\Chatty-Client\obj\Debug\netcoreapp2.1\Chatty-Client.AssemblyInfoInputs.cache
+F:\Eduardo\Documents\Code\C#\Chatty\Chatty-Client\obj\Debug\netcoreapp2.1\Chatty-Client.AssemblyInfo.cs
+F:\Eduardo\Documents\Code\C#\Chatty\Chatty-Client\obj\Debug\netcoreapp2.1\Chatty-Client.dll
+F:\Eduardo\Documents\Code\C#\Chatty\Chatty-Client\obj\Debug\netcoreapp2.1\Chatty-Client.pdb

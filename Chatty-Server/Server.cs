@@ -8,15 +8,15 @@ using System.Threading;
 
 namespace ChattyServer
 {
-    class Server
+    static class Server
     {
-        private static TcpListener serverSocket = default(TcpListener);
-        private static Socket clientSocket = default(Socket);
+        private static TcpListener serverSocket;
+        private static Socket clientSocket;
 
         private static readonly int maxConnections = 20;
         private static readonly ClientHandler[] clients = new ClientHandler[maxConnections];
 
-        static void Main(string[] args)
+        static void Main()
         {
             // Sets the max number of clients that can be connected at
             // any given time, and initializes the server and client sockets
@@ -72,6 +72,11 @@ namespace ChattyServer
         private string clientName;
         private StreamReader ins;
         private StreamWriter outs;
+        private readonly object _lockObject = new object();
+        private readonly object _lockObject2 = new object();
+        private readonly object _lockObject3 = new object();
+        private readonly object _lockObject4 = new object();
+        private readonly object _lockObject5 = new object();
 
         // Initializes client and starts its thread
         public void StartClient(Socket clientSocket, ClientHandler[] clients)
@@ -129,7 +134,7 @@ namespace ChattyServer
 
                 while (true)
                 {
-                    outs.WriteLine("Please write a username: ");
+                    //outs.WriteLine("Please write a username: ");
                     name = ins.ReadLine().Trim();
 
                     // If the name is valid breaks out of the cycle, otherwise it keeps
@@ -151,7 +156,7 @@ namespace ChattyServer
 
                 // The lock is used to synchronize the statement by holding the object (ClientHandle) blocked 
                 // until the next statements are complete
-                lock (this)
+                lock (_lockObject)
                 {
                     foreach (var client in clients)
                     {
@@ -184,6 +189,7 @@ namespace ChattyServer
                     // Lists all connected clients
                     if (line.StartsWith("/list"))
                     {
+                        outs.WriteLine("Connected Users: ");
                         foreach (var client in clients)
                         {
                             if (client != null && client != this)
@@ -206,9 +212,9 @@ namespace ChattyServer
                         if (words.Length > 1 && words[1] != null)
                         {
                             words[1] = words[1].Trim();
-                            if (words[1].Any())
+                            if (words[1].Length > 0)
                             {
-                                lock (this)
+                                lock (_lockObject2)
                                 {
                                     foreach (var client in clients)
                                     {
@@ -226,14 +232,14 @@ namespace ChattyServer
 
                     else
                     {
-                        lock (this)
+                        lock (_lockObject3)
                         {
                             if (!IsCommand(line))
                             {
                                 foreach (var client in clients)
                                 {
                                     if (client?.clientName != null)
-                                        client.outs.WriteLine("\n{0}:\n{1}", name, line);
+                                        client.outs.WriteLine("{0}: {1}", name, line);
                                 }
                             }
                         }
@@ -241,21 +247,21 @@ namespace ChattyServer
                 }
 
                 // User disconnected notification
-                Console.WriteLine("User: {0} disconnected from the lobby", name);
-                lock (this)
+                Console.WriteLine("User: {0} disconnected from the lobby\n", name);
+                lock (_lockObject4)
                 {
                     // Notifies clients of user disconnection
                     foreach (var client in clients)
                     {
                         if (client != null)
-                            client.outs.WriteLine("User {0} has disconnected", name);
+                            client.outs.WriteLine("User {0} has disconnected\n", name);
                     }
                 }
 
                 // Bids farewell to the client
                 outs.WriteLine("Goodbye {0}", name);
 
-                lock (this)
+                lock (_lockObject5)
                 {
                     for (int i = 0; i < maxClientsCount; i++)
                     {
