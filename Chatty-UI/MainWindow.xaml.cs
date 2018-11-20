@@ -70,7 +70,7 @@ namespace Chatty_UI
                 //Console.WriteLine("Trying to connect to the server...\n");
 
                 // Creates a new TCP Client with IP: localhost and Port: 8080 (TCP)
-                client = new TcpClient("127.0.0.1", 8080);
+                client = new TcpClient("10.25.70.62", 8080);
                 ins = new StreamReader(client.GetStream());
                 outs = new StreamWriter(client.GetStream());
                 // Flushes buffer after every call to StreamWriter.Write()

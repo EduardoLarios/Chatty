@@ -1,0 +1,14 @@
+C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-UI\bin\Release\Chatty-UI.exe.config
+C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-UI\bin\Release\Chatty-UI.exe
+C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-UI\bin\Release\Chatty-UI.pdb
+C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-UI\obj\Release\Chatty-UI.csprojAssemblyReference.cache
+C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-UI\obj\Release\MainWindow.baml
+C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-UI\obj\Release\MainWindow.g.cs
+C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-UI\obj\Release\App.g.cs
+C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-UI\obj\Release\Chatty-UI_MarkupCompile.cache
+C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-UI\obj\Release\Chatty-UI.g.resources
+C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-UI\obj\Release\Chatty_UI.Properties.Resources.resources
+C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-UI\obj\Release\Chatty-UI.csproj.GenerateResource.cache
+C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-UI\obj\Release\Chatty-UI.csproj.CoreCompileInputs.cache
+C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-UI\obj\Release\Chatty-UI.exe
+C:\Users\Eduardo Larios\Documents\Code\C#\Chatty\Chatty-UI\obj\Release\Chatty-UI.pdb
